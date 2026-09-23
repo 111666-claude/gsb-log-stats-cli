@@ -3,10 +3,10 @@
 一个小型日志延迟统计命令行工具，只用 Python 标准库。
 
 ```
-python -m logstats.cli --file sample/app.log \
+python3 -m logstats.cli --file sample/app.log \
     --from 2026-09-22T00:00 --to 2026-09-22T02:00 \
     --window-minutes 60 --top 5
-python -m unittest discover -s tests -v
+python3 -m unittest discover -s tests -v
 ```
 
 ## 日志格式
