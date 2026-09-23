@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Iterable
 
 LINE_RE = re.compile(
@@ -31,7 +31,7 @@ class Record:
 
 
 def parse_timestamp(text: str) -> datetime:
-    """把时间戳文本解析成时间轴上的时刻（口径见 README）。"""
+    """把时间戳文本解析成 UTC 时间轴上的时刻（naive，口径见 README）。"""
     cleaned = text.strip()
     if cleaned.endswith("Z"):
         cleaned = cleaned[:-1] + "+00:00"
@@ -39,6 +39,8 @@ def parse_timestamp(text: str) -> datetime:
         moment = datetime.fromisoformat(cleaned)
     except ValueError as exc:
         raise ParseError(f"无法解析时间戳：{text!r}") from exc
+    if moment.tzinfo is not None:
+        moment = moment.astimezone(timezone.utc)
     return moment.replace(tzinfo=None)
 
 
